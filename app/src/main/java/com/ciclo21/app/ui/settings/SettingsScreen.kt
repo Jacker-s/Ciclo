@@ -2,7 +2,6 @@ package com.ciclo21.app.ui.settings
 
 import android.app.TimePickerDialog
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,7 +11,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,13 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
-import com.ciclo21.app.data.local.AppDatabase
 import com.ciclo21.app.ui.theme.*
 import com.ciclo21.app.data.local.PreferenceManager
 import com.ciclo21.app.data.util.AlarmScheduler
-import kotlinx.coroutines.launch
-import java.io.File
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -45,11 +39,7 @@ fun SettingsScreen() {
     val context = LocalContext.current
     val preferenceManager = remember { PreferenceManager(context) }
     val alarmScheduler = remember { AlarmScheduler(context) }
-    val db = AppDatabase.getDatabase(context)
-    val dao = db.dailyRecordDao()
-    val coroutineScope = rememberCoroutineScope()
-
-    var showDeleteDialog by remember { mutableStateOf(false) }
+    
     var showPillSelector by remember { mutableStateOf(false) }
     
     var pillTime by remember { mutableStateOf(preferenceManager.getPillTime()) }
@@ -137,40 +127,6 @@ fun SettingsScreen() {
                             preferenceManager.setBiometricLock(it)
                         }
                     )
-                }
-            }
-
-            item {
-                Section("DADOS DO APLICATIVO") {
-                    SettingItem(icon = Icons.Default.Share, title = "Exportar meus dados", subtitle = "Gerar um arquivo CSV com seus registros") {
-                        coroutineScope.launch {
-                            val records = dao.getAllRecordsAsList()
-                            val csvData = StringBuilder("data,pilula_tomada,sintomas\n")
-                            records.forEach { record ->
-                                csvData.append("${record.date},${record.pillTaken},${record.symptoms.joinToString("|")}\n")
-                            }
-                            val file = File(context.cacheDir, "ciclo21_export.csv").apply { writeText(csvData.toString()) }
-                            val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
-                            val intent = Intent(Intent.ACTION_SEND).apply {
-                                type = "text/csv"
-                                putExtra(Intent.EXTRA_STREAM, uri)
-                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            }
-                            context.startActivity(Intent.createChooser(intent, "Exportar Dados"))
-                        }
-                    }
-                    HorizontalDivider(modifier = Modifier.padding(start = 56.dp), color = iOSSeparator)
-                    SettingItem(icon = Icons.AutoMirrored.Filled.List, title = "Reiniciar configuração inicial", subtitle = "Voltar para a tela de onboarding") {
-                        preferenceManager.setOnboardingCompleted(false)
-                    }
-                    HorizontalDivider(modifier = Modifier.padding(start = 56.dp), color = iOSSeparator)
-                    SettingItem(icon = Icons.Default.Delete, title = "Apagar todos os dados", subtitle = "Remover ciclos, sintomas e preferências") { showDeleteDialog = true }
-                }
-            }
-
-            item {
-                Section("SOBRE") {
-                    SettingItem(icon = Icons.Default.Info, title = "Versão do App", subtitle = getAppVersion(context)) {}
                 }
             }
 
@@ -287,24 +243,6 @@ fun SettingsScreen() {
             }
         }
     }
-
-    if (showDeleteDialog) {
-        AlertDialog(
-            onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Apagar Tudo?") },
-            text = { Text("Esta ação é irreversível. Todos os seus dados de ciclo, sintomas e configurações serão perdidos.") },
-            confirmButton = {
-                Button(onClick = {
-                    coroutineScope.launch {
-                        dao.clearAll()
-                        preferenceManager.clearAll()
-                        showDeleteDialog = false
-                    }
-                }, colors = ButtonDefaults.buttonColors(containerColor = Color.Red)) { Text("Apagar", color = Color.White) }
-            },
-            dismissButton = { TextButton(onClick = { showDeleteDialog = false }) { Text("Cancelar") } }
-        )
-    }
 }
 
 @Composable
@@ -351,13 +289,5 @@ private fun SettingSwitchItem(icon: ImageVector, title: String, subtitle: String
                 uncheckedTrackColor = Color.LightGray
             )
         )
-    }
-}
-
-private fun getAppVersion(context: Context): String {
-    return try {
-        context.packageManager.getPackageInfo(context.packageName, 0).versionName
-    } catch (e: Exception) {
-        "1.0.0"
     }
 }
