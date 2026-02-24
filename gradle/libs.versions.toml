@@ -1,13 +1,13 @@
 [versions]
 agp = "8.4.0"
 kotlin = "2.0.0"
-coreKtx = "1.12.0"
+coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.7.0"
-activityCompose = "1.8.2"
-composeBom = "2024.04.01"
+activityCompose = "1.9.0"
+composeBom = "2024.05.00"
 room = "2.6.1"
 navigation = "2.7.7"
 material = "1.11.0"
@@ -15,7 +15,7 @@ datastore = "1.0.0"
 splashscreen = "1.0.1"
 work = "2.9.0"
 biometric = "1.2.0-alpha05"
-fragment = "1.6.2"
+fragment = "1.7.1"
 
 [libraries]
 androidx_core_ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
