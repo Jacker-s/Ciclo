@@ -1,0 +1,5 @@
+<resources>
+    <color name="ciclo_gradient_start">#FF5FA2</color>
+    <color name="ciclo_gradient_end">#7B4DFF</color>
+    <color name="ciclo_background">#C84DFF</color>
+</resources>

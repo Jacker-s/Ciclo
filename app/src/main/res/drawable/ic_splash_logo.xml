@@ -1,0 +1,54 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!--
+      Logotipo Splash: Uma versão mais elegante e moderna do ícone do app,
+      centralizada para a API de Splash Screen do Android 12+.
+    -->
+    <group
+        android:translateX="54"
+        android:translateY="54">
+
+        <!-- Lua Crescente com Degradê Suave -->
+        <path
+            android:pathData="M0,-32
+                              A32,32 0 1,1 0,32
+                              A26,28 0 0,0 0,-32 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="0"
+                    android:startY="-32"
+                    android:endX="0"
+                    android:endY="32"
+                    android:type="linear">
+                    <item android:offset="0" android:color="#FFFFFF" />
+                    <item android:offset="1" android:color="#F0F0F0" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- Coração Vibrante Centralizado na Curva -->
+        <path
+            android:fillColor="#FF2D55"
+            android:pathData="M0,-6
+                              C0,-11 8,-11 8,-6
+                              C8,-1 0,7 0,7
+                              C0,7 -8,-1 -8,-6
+                              C-8,-11 0,-11 0,-6 Z"
+            android:translateX="12"
+            android:translateY="0" />
+
+        <!-- Texto "Ciclo 21" estilizado abaixo do ícone (Opcional, mas moderno) -->
+        <group android:translateY="45" android:translateX="-20">
+             <!-- Simbolismo minimalista do número 21 -->
+             <path
+                android:fillColor="#FFFFFF"
+                android:fillAlpha="0.8"
+                android:pathData="M0,0 h10 v2 h-10 Z M15,0 h2 v10 h-2 Z" />
+        </group>
+    </group>
+</vector>

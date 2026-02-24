@@ -1,0 +1,71 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="288dp"
+            android:height="288dp"
+            android:viewportWidth="108"
+            android:viewportHeight="108">
+            <!-- Grupo de Rotação -->
+            <group
+                android:name="rotationGroup"
+                android:pivotX="54"
+                android:pivotY="54">
+                <path
+                    android:name="morphPath"
+                    android:fillColor="#00000000"
+                    android:strokeColor="#FF2D55"
+                    android:strokeWidth="3"
+                    android:strokeLineCap="round"
+                    android:strokeLineJoin="round"
+                    android:pathData="M 54,24 C 70.57,24 84,37.43 84,54 C 84,70.57 70.57,84 54,84 C 37.43,84 24,70.57 24,54 C 24,37.43 37.43,24 54,24 Z" />
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <!-- Animação de Rotação -->
+    <target android:name="rotationGroup">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="1500"
+                android:propertyName="rotation"
+                android:valueFrom="0"
+                android:valueTo="360"
+                android:interpolator="@android:interpolator/fast_out_slow_in" />
+        </aapt:attr>
+    </target>
+
+    <!-- Animações do Path -->
+    <target android:name="morphPath">
+        <aapt:attr name="android:animation">
+            <set>
+                <!-- 1. Efeito de "Abrir/Desenhar" a linha -->
+                <objectAnimator
+                    android:duration="1000"
+                    android:propertyName="trimPathEnd"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
+
+                <!-- 2. Transformação em Coração (inicia após o giro começar) -->
+                <objectAnimator
+                    android:startOffset="600"
+                    android:duration="900"
+                    android:propertyName="pathData"
+                    android:valueFrom="M 54,24 C 70.57,24 84,37.43 84,54 C 84,70.57 70.57,84 54,84 C 37.43,84 24,70.57 24,54 C 24,37.43 37.43,24 54,24 Z"
+                    android:valueTo="M 54,34 C 64,24 84,28 84,50 C 84,70 54,84 54,84 C 54,84 24,70 24,50 C 24,28 44,24 54,34 Z"
+                    android:valueType="pathType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
+
+                <!-- 3. Mudança de cor suave durante a transição -->
+                <objectAnimator
+                    android:startOffset="600"
+                    android:duration="900"
+                    android:propertyName="strokeColor"
+                    android:valueFrom="#FF2D55"
+                    android:valueTo="#AF52DE"
+                    android:interpolator="@android:interpolator/linear" />
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>
